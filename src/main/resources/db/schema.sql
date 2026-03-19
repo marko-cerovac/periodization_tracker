@@ -149,14 +149,36 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `periodization_tracker`.`users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `periodization_tracker`.`users` (
+  `user_id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(255) NOT NULL,
+  `age` INT UNSIGNED NOT NULL,
+  `gender` ENUM('Male', 'Female', 'AlphabetPerson') NOT NULL,
+  `weight` INT NOT NULL,
+  `height` INT NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `periodization_tracker`.`sessions`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sessions` (
   `session_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   `description` MEDIUMTEXT NOT NULL,
-  PRIMARY KEY (`session_id`),
-  UNIQUE INDEX `session_id_UNIQUE` (`session_id` ASC) VISIBLE)
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`session_id`, `user_id`),
+  UNIQUE INDEX `session_id_UNIQUE` (`session_id` ASC) VISIBLE,
+  INDEX `fk_sessions_users1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_sessions_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `periodization_tracker`.`users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -167,12 +189,12 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`exercise_blocks` (
   `exercise_block_id` INT NOT NULL AUTO_INCREMENT,
   `rest_duration` INT UNSIGNED NULL,
   `name` VARCHAR(255) NULL,
-  `sessions_session_id` INT NOT NULL,
+  `session_id` INT NOT NULL,
   PRIMARY KEY (`exercise_block_id`),
   UNIQUE INDEX `exercise_block_id_UNIQUE` (`exercise_block_id` ASC) VISIBLE,
-  INDEX `fk_exercise_blocks_sessions1_idx` (`sessions_session_id` ASC) VISIBLE,
+  INDEX `fk_exercise_blocks_sessions1_idx` (`session_id` ASC) VISIBLE,
   CONSTRAINT `fk_exercise_blocks_sessions1`
-    FOREIGN KEY (`sessions_session_id`)
+    FOREIGN KEY (`session_id`)
     REFERENCES `periodization_tracker`.`sessions` (`session_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -189,9 +211,11 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sets` (
   `exercise_id` INT NOT NULL,
   `repetition_type_id` INT NOT NULL,
   `exercise_block_id` INT NOT NULL,
-  PRIMARY KEY (`exercise_id`, `exercise_block_id`),
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`exercise_id`, `exercise_block_id`, `user_id`),
   INDEX `fk_sets_repetition_types1_idx` (`repetition_type_id` ASC) VISIBLE,
   INDEX `fk_sets_exercise_blocks1_idx` (`exercise_block_id` ASC) VISIBLE,
+  INDEX `fk_sets_users1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_sets_exercises1`
     FOREIGN KEY (`exercise_id`)
     REFERENCES `periodization_tracker`.`exercises` (`exercise_id`)
@@ -205,6 +229,11 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sets` (
   CONSTRAINT `fk_sets_exercise_blocks1`
     FOREIGN KEY (`exercise_block_id`)
     REFERENCES `periodization_tracker`.`exercise_blocks` (`exercise_block_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_sets_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `periodization_tracker`.`users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -241,8 +270,15 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`training_blocks` (
   `name` VARCHAR(255) NULL,
   `description` MEDIUMTEXT NULL,
   `duration` INT UNSIGNED NULL,
-  PRIMARY KEY (`training_block_id`),
-  UNIQUE INDEX `training_block_id_UNIQUE` (`training_block_id` ASC) VISIBLE)
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`training_block_id`, `user_id`),
+  UNIQUE INDEX `training_block_id_UNIQUE` (`training_block_id` ASC) VISIBLE,
+  INDEX `fk_training_blocks_users1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_training_blocks_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `periodization_tracker`.`users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -269,33 +305,18 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `periodization_tracker`.`users`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `periodization_tracker`.`users` (
-  `user_id` INT NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(255) NOT NULL,
-  `age` INT UNSIGNED NOT NULL,
-  `gender` ENUM('Male', 'Female', 'AlphabetPerson') NOT NULL,
-  `weight` INT NOT NULL,
-  `height` INT NOT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `periodization_tracker`.`training_plans`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `periodization_tracker`.`training_plans` (
   `training_plan_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   `description` MEDIUMTEXT NULL,
-  `users_user_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
   PRIMARY KEY (`training_plan_id`),
   UNIQUE INDEX `training_plan_id_UNIQUE` (`training_plan_id` ASC) VISIBLE,
-  INDEX `fk_training_plans_users1_idx` (`users_user_id` ASC) VISIBLE,
+  INDEX `fk_training_plans_users1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_training_plans_users1`
-    FOREIGN KEY (`users_user_id`)
+    FOREIGN KEY (`user_id`)
     REFERENCES `periodization_tracker`.`users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
