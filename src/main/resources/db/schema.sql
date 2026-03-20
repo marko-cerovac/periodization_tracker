@@ -127,21 +127,21 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `periodization_tracker`.`exercises_hits_targets`
+-- Table `periodization_tracker`.`exercise_hits_targets`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `periodization_tracker`.`exercises_hits_targets` (
-  `exercises_exercise_id` INT NOT NULL,
-  `targets_target_id` INT NOT NULL,
-  PRIMARY KEY (`exercises_exercise_id`, `targets_target_id`),
-  INDEX `fk_exercises_has_targets_targets1_idx` (`targets_target_id` ASC) VISIBLE,
-  INDEX `fk_exercises_has_targets_exercises1_idx` (`exercises_exercise_id` ASC) VISIBLE,
+CREATE TABLE IF NOT EXISTS `periodization_tracker`.`exercise_hits_targets` (
+  `exercise_id` INT NOT NULL,
+  `target_id` INT NOT NULL,
+  PRIMARY KEY (`exercise_id`, `target_id`),
+  INDEX `fk_exercises_has_targets_targets1_idx` (`target_id` ASC) VISIBLE,
+  INDEX `fk_exercises_has_targets_exercises1_idx` (`exercise_id` ASC) VISIBLE,
   CONSTRAINT `fk_exercises_has_targets_exercises1`
-    FOREIGN KEY (`exercises_exercise_id`)
+    FOREIGN KEY (`exercise_id`)
     REFERENCES `periodization_tracker`.`exercises` (`exercise_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_exercises_has_targets_targets1`
-    FOREIGN KEY (`targets_target_id`)
+    FOREIGN KEY (`target_id`)
     REFERENCES `periodization_tracker`.`targets` (`target_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sessions` (
   `name` VARCHAR(255) NOT NULL,
   `description` MEDIUMTEXT NOT NULL,
   `user_id` INT NOT NULL,
-  PRIMARY KEY (`session_id`, `user_id`),
+  PRIMARY KEY (`session_id`),
   UNIQUE INDEX `session_id_UNIQUE` (`session_id` ASC) VISIBLE,
   INDEX `fk_sessions_users1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_sessions_users1`
@@ -183,39 +183,22 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `periodization_tracker`.`exercise_blocks`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `periodization_tracker`.`exercise_blocks` (
-  `exercise_block_id` INT NOT NULL AUTO_INCREMENT,
-  `rest_duration` INT UNSIGNED NULL,
-  `name` VARCHAR(255) NULL,
-  `session_id` INT NOT NULL,
-  PRIMARY KEY (`exercise_block_id`),
-  UNIQUE INDEX `exercise_block_id_UNIQUE` (`exercise_block_id` ASC) VISIBLE,
-  INDEX `fk_exercise_blocks_sessions1_idx` (`session_id` ASC) VISIBLE,
-  CONSTRAINT `fk_exercise_blocks_sessions1`
-    FOREIGN KEY (`session_id`)
-    REFERENCES `periodization_tracker`.`sessions` (`session_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `periodization_tracker`.`sets`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sets` (
+  `set_id` INT NOT NULL AUTO_INCREMENT,
   `number_of_repetitions` INT UNSIGNED NULL,
-  `repetitions` INT UNSIGNED NULL,
+  `rest_duration` INT UNSIGNED NULL,
+  `weight` DOUBLE NULL,
   `rpe` INT UNSIGNED NULL,
+  `block` TINYINT NULL,
   `exercise_id` INT NOT NULL,
   `repetition_type_id` INT NOT NULL,
-  `exercise_block_id` INT NOT NULL,
-  `user_id` INT NOT NULL,
-  PRIMARY KEY (`exercise_id`, `exercise_block_id`, `user_id`),
+  `session_id` INT NOT NULL,
+  PRIMARY KEY (`set_id`),
   INDEX `fk_sets_repetition_types1_idx` (`repetition_type_id` ASC) VISIBLE,
-  INDEX `fk_sets_exercise_blocks1_idx` (`exercise_block_id` ASC) VISIBLE,
-  INDEX `fk_sets_users1_idx` (`user_id` ASC) VISIBLE,
+  INDEX `fk_sets_sessions1_idx` (`session_id` ASC) VISIBLE,
+  UNIQUE INDEX `set_id_UNIQUE` (`set_id` ASC) VISIBLE,
   CONSTRAINT `fk_sets_exercises1`
     FOREIGN KEY (`exercise_id`)
     REFERENCES `periodization_tracker`.`exercises` (`exercise_id`)
@@ -226,14 +209,9 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sets` (
     REFERENCES `periodization_tracker`.`repetition_types` (`repetition_type_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_sets_exercise_blocks1`
-    FOREIGN KEY (`exercise_block_id`)
-    REFERENCES `periodization_tracker`.`exercise_blocks` (`exercise_block_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_sets_users1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `periodization_tracker`.`users` (`user_id`)
+  CONSTRAINT `fk_sets_sessions1`
+    FOREIGN KEY (`session_id`)
+    REFERENCES `periodization_tracker`.`sessions` (`session_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -271,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`training_blocks` (
   `description` MEDIUMTEXT NULL,
   `duration` INT UNSIGNED NULL,
   `user_id` INT NOT NULL,
-  PRIMARY KEY (`training_block_id`, `user_id`),
+  PRIMARY KEY (`training_block_id`),
   UNIQUE INDEX `training_block_id_UNIQUE` (`training_block_id` ASC) VISIBLE,
   INDEX `fk_training_blocks_users1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_training_blocks_users1`
