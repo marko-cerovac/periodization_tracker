@@ -9,6 +9,8 @@ import java.util.Properties;
 
 /**
  * DatabaseConnection
+ *
+ * A singleton that represents a database connection.
  */
 public final class DatabaseConnection {
     private static volatile DatabaseConnection instance;
