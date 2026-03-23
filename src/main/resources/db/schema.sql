@@ -154,10 +154,10 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `periodization_tracker`.`users` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(255) NOT NULL,
-  `age` INT UNSIGNED NOT NULL,
-  `gender` ENUM('Male', 'Female', 'AlphabetPerson') NOT NULL,
-  `weight` INT NOT NULL,
-  `height` INT NOT NULL,
+  `age` INT UNSIGNED NULL,
+  `gender` ENUM('Male', 'Female', 'AlphabetPerson') NULL,
+  `weight` DOUBLE NULL,
+  `height` DOUBLE NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE)
 ENGINE = InnoDB;

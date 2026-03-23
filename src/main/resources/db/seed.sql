@@ -5,12 +5,12 @@ USE periodization_tracker;
 -- users
 -- -----------------------------------------------------
 INSERT INTO `users` (`username`, `age`, `gender`, `weight`, `height`) VALUES
-  ('anatoly_pisarenko', 28, 'Male',           109, 181),
-  ('vasily_alexeev',    24, 'Female',         62,  168),
-  ('asen_zlatev',       35, 'Male',           92,  185),
-  ('naim_suleymanoglu', 30, 'Female',         58,  165),
-  ('piros_dimas',       22, 'AlphabetPerson', 71,  174),
-  ('valerios_leonidis', 40, 'Male',           100, 178);
+  ('anatoly_pisarenko', 28, 'Male',           109.2, 181.1),
+  ('vasily_alexeev',    24, 'Female',         62.5,  168.2),
+  ('asen_zlatev',       35, 'Male',           92.0,  185.3),
+  ('naim_suleymanoglu', 30, 'Female',         58.4,  165.4),
+  ('piros_dimas',       22, 'AlphabetPerson', 71.0,  174.5),
+  ('valerios_leonidis', 40, 'Male',           100.5, 178.6);
 
 -- -----------------------------------------------------
 -- target_types
