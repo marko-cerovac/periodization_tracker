@@ -23,12 +23,11 @@ public class ExerciseTypeDAO {
                     exerciseType.setExerciseTypeId(generatedKeys.getInt(1));
                 }
             }
-
         }
     }
 
     public Optional<ExerciseType> findById(int exerciseTypeId) throws SQLException {
-        String query = "SELECT exercise_type_id, name FROM exercise_type WHERE exercise_type_id = ?";
+        String query = "SELECT exercise_type_id, name FROM exercise_types WHERE exercise_type_id = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -36,7 +35,7 @@ public class ExerciseTypeDAO {
             stmt.setInt(1, exerciseTypeId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(mapResultSetToTargetType(rs));
+                    return Optional.of(mapResultSetToExerciseType(rs));
                 }
             }
         }
@@ -45,7 +44,7 @@ public class ExerciseTypeDAO {
     }
 
     public List<ExerciseType> findAll() throws SQLException {
-        String query = "SELECT exercise_type_id, name FROM exercise_type";
+        String query = "SELECT exercise_type_id, name FROM exercise_types";
         List<ExerciseType> exerciseTypes = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -53,7 +52,7 @@ public class ExerciseTypeDAO {
                 ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                exerciseTypes.add(mapResultSetToTargetType(rs));
+                exerciseTypes.add(mapResultSetToExerciseType(rs));
             }
         }
 
@@ -72,7 +71,7 @@ public class ExerciseTypeDAO {
         }
     }
 
-    private ExerciseType mapResultSetToTargetType(ResultSet rs) throws SQLException {
+    private ExerciseType mapResultSetToExerciseType(ResultSet rs) throws SQLException {
         return new ExerciseType(
                 rs.getInt("exercise_type_id"),
                 rs.getString("name"));
