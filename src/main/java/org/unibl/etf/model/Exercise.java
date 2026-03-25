@@ -45,6 +45,10 @@ class Exercise {
         this.exerciseTypeId = exerciseTypeId;
     }
 
+    public boolean hasDescription() {
+        return description != null;
+    }
+
     @Override
     public String toString() {
         return "Exercise{id=" + exerciseId + ", name='" + name + "', description='" + description + "', exerciseTypeId="

@@ -45,6 +45,10 @@ class TrainingPlan {
         this.userId = userId;
     }
 
+    public boolean hasDescription() {
+        return description != null;
+    }
+
     public String toString() {
         return "TrainingPlan{id=" + trainingPlanId + ", name='" + name + "', description='" + description + "', userId="
                 + userId + "}";

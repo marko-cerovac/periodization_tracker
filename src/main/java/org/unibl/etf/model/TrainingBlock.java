@@ -55,6 +55,18 @@ class TrainingBlock {
         this.userId = userId;
     }
 
+    public boolean hasName() {
+        return name != null;
+    }
+
+    public boolean hasDescription() {
+        return description != null;
+    }
+
+    public boolean hasDuration() {
+        return duration != null;
+    }
+
     public String toString() {
         return "TrainingBlock{id=" + trainingBlockId + ", name='" + name + "', description=" + description
                 + "', duration=" + duration + ", userId=" + userId + "}";

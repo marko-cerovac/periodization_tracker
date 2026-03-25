@@ -55,6 +55,14 @@ public class Target {
         this.targetTypeId = targetTypeId;
     }
 
+    public boolean hasLatinName() {
+        return latinName != null;
+    }
+
+    public boolean hasDescription() {
+        return description != null;
+    }
+
     @Override
     public String toString() {
         return "Target{id=" + targetId + ", name='" + name + "', latinName='" + latinName +

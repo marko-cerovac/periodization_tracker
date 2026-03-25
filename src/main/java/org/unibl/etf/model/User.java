@@ -33,7 +33,7 @@ public class User {
         return gender;
     }
 
-    public double getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
@@ -63,6 +63,22 @@ public class User {
 
     public void setHeight(Double height) {
         this.height = height;
+    }
+
+    public boolean hasAge() {
+        return age != null;
+    }
+
+    public boolean hasGender() {
+        return gender != null;
+    }
+
+    public boolean hasWeight() {
+        return weight != null;
+    }
+
+    public boolean hasHeight() {
+        return height != null;
     }
 
     @Override
