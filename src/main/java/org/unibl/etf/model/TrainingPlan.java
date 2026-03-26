@@ -1,6 +1,6 @@
 package org.unibl.etf.model;
 
-class TrainingPlan {
+public class TrainingPlan {
     private int trainingPlanId;
     private String name;
     private String description;

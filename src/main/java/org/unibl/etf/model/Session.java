@@ -1,6 +1,6 @@
 package org.unibl.etf.model;
 
-class Session {
+public class Session {
     private int sessionId;
     private String name;
     private String description;

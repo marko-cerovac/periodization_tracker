@@ -17,7 +17,7 @@ import java.util.Optional;
  *
  * @param <T> the entity type this DAO manages
  */
-public abstract class GenericDAO<T> {
+abstract class GenericDAO<T> {
 
     /**
      * @return the database table name (e.g. {@code "target_types"})

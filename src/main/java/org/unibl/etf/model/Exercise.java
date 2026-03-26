@@ -1,6 +1,6 @@
 package org.unibl.etf.model;
 
-class Exercise {
+public class Exercise {
     private int exerciseId;
     private String name;
     private String description;

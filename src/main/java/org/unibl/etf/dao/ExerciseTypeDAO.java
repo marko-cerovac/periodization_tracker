@@ -20,7 +20,7 @@ public class ExerciseTypeDAO extends GenericDAO<ExerciseType> {
     @Override
     public ExerciseType mapRow(ResultSet rs) throws SQLException {
         return new ExerciseType(
-                rs.getInt("exercise_type_id"),
+                rs.getInt(getPrimaryKeyColumn()),
                 rs.getString("name"));
     }
 
