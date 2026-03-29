@@ -1,21 +1,15 @@
 package org.unibl.etf.dao;
 
 import java.sql.*;
+import java.util.Optional;
 
 import org.unibl.etf.model.Target;
+import org.unibl.etf.model.TargetType;
 import org.unibl.etf.util.DatabaseConnection;
 
-// ExerciseType.java
-// RepetitionType.java
-// TargetType.java
-//
-// Target.java
-//
-// TrainingBlock.java
-// TrainingPlan.java
-// User.java
 
 public class TargetDAO extends GenericDAO<Target> {
+    private static TargetTypeDAO targetTypeDAO = new TargetTypeDAO();
 
     @Override
     public String getTableName() {
@@ -96,5 +90,25 @@ public class TargetDAO extends GenericDAO<Target> {
             stmt.setInt(5, target.getTargetId());
             stmt.executeUpdate();
         }
+    }
+
+    public Optional<TargetType> getTargetType(Target target) throws SQLException {
+        String query = "SELECT target_type_id, name FROM target_types"
+            + " WHERE target_type_id = ?";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, target.getTargetTypeId());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(targetTypeDAO.mapRow(rs)); 
+                }
+
+            }
+        }
+
+        return Optional.empty();
     }
 }
