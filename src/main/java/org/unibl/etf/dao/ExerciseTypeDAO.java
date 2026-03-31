@@ -1,9 +1,12 @@
 package org.unibl.etf.dao;
 
 import org.unibl.etf.model.ExerciseType;
+import org.unibl.etf.model.PPAspect;
 import org.unibl.etf.util.DatabaseConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExerciseTypeDAO extends GenericDAO<ExerciseType> {
 

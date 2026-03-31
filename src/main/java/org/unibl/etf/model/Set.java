@@ -96,6 +96,26 @@ public class Set {
         this.sessionId = sessionId;
     }
 
+    public boolean hasNumberOfRepetitions() {
+        return this.numberOfRepetitions != null;
+    }
+
+    public boolean hasRestDuration() {
+        return this.restDuration != null;
+    }
+
+    public boolean hasWeight() {
+        return this.weight != null;
+    }
+
+    public boolean hasRpe() {
+        return this.rpe != null;
+    }
+
+    public boolean hasBlock() {
+        return this.block != null;
+    }
+
     @Override
     public String toString() {
         return "Set{id=" + setId + ", reps=" + numberOfRepetitions + ", rest=" + restDuration +

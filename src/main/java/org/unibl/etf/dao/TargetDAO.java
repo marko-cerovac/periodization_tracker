@@ -7,7 +7,6 @@ import org.unibl.etf.model.Target;
 import org.unibl.etf.model.TargetType;
 import org.unibl.etf.util.DatabaseConnection;
 
-
 public class TargetDAO extends GenericDAO<Target> {
     private static TargetTypeDAO targetTypeDAO = new TargetTypeDAO();
 
@@ -40,20 +39,7 @@ public class TargetDAO extends GenericDAO<Target> {
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setString(1, target.getName());
-
-            if (target.hasLatinName()) {
-                stmt.setString(2, target.getLatinName());
-            } else {
-                stmt.setNull(2, Types.VARCHAR);
-            }
-
-            if (target.hasDescription()) {
-                stmt.setString(3, target.getDescription());
-            } else {
-                stmt.setNull(3, Types.VARCHAR);
-            }
-            stmt.setInt(4, target.getTargetTypeId());
+            fillStatement(stmt, target);
             stmt.executeUpdate();
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
@@ -72,21 +58,7 @@ public class TargetDAO extends GenericDAO<Target> {
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setString(1, target.getName());
-
-            if (target.getLatinName() != null) {
-                stmt.setString(2, target.getLatinName());
-            } else {
-                stmt.setNull(2, Types.VARCHAR);
-            }
-
-            if (target.getDescription() != null) {
-                stmt.setString(3, target.getDescription());
-            } else {
-                stmt.setNull(3, Types.VARCHAR);
-            }
-            stmt.setInt(4, target.getTargetTypeId());
+            fillStatement(stmt, target);
             stmt.setInt(5, target.getTargetId());
             stmt.executeUpdate();
         }
@@ -94,7 +66,7 @@ public class TargetDAO extends GenericDAO<Target> {
 
     public Optional<TargetType> getTargetType(Target target) throws SQLException {
         String query = "SELECT target_type_id, name FROM target_types"
-            + " WHERE target_type_id = ?";
+                + " WHERE target_type_id = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -103,12 +75,29 @@ public class TargetDAO extends GenericDAO<Target> {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(targetTypeDAO.mapRow(rs)); 
+                    return Optional.of(targetTypeDAO.mapRow(rs));
                 }
 
             }
         }
 
         return Optional.empty();
+    }
+
+    private void fillStatement(PreparedStatement stmt, Target target) throws SQLException {
+        stmt.setString(1, target.getName());
+
+        if (target.hasLatinName()) {
+            stmt.setString(2, target.getLatinName());
+        } else {
+            stmt.setNull(2, Types.VARCHAR);
+        }
+
+        if (target.hasDescription()) {
+            stmt.setString(3, target.getDescription());
+        } else {
+            stmt.setNull(3, Types.VARCHAR);
+        }
+        stmt.setInt(4, target.getTargetTypeId());
     }
 }

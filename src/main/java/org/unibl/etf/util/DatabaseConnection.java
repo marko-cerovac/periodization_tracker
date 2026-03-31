@@ -17,6 +17,12 @@ public final class DatabaseConnection {
     private Connection connection;
 
     private DatabaseConnection() throws SQLException {
+        try {
+            Class.forName("org.mariadb.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("MariaDB driver not found", e);
+        }
+        
         Properties properties = new Properties();
 
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("db.properties")) {

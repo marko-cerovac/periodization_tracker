@@ -4,6 +4,8 @@ import org.unibl.etf.model.TrainingBlock;
 import org.unibl.etf.util.DatabaseConnection;
 
 import java.sql.*;
+// import java.util.List;
+// import java.util.ArrayList;
 
 /**
  * TrainingBlockDAO
@@ -36,26 +38,7 @@ public class TrainingBlockDAO extends GenericDAO<TrainingBlock> {
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-
-            if (trainingBlock.hasName()) {
-                stmt.setString(1, trainingBlock.getName());
-            } else {
-                stmt.setNull(1, Types.VARCHAR);
-            }
-
-            if (trainingBlock.hasDescription()) {
-                stmt.setString(2, trainingBlock.getDescription());
-            } else {
-                stmt.setNull(2, Types.VARCHAR);
-            }
-
-            if (trainingBlock.hasDuration()) {
-                stmt.setInt(3, trainingBlock.getDuration());
-            } else {
-                stmt.setNull(3, Types.INTEGER);
-            }
-
-            stmt.setInt(4, trainingBlock.getUserId());
+            fillStatement(stmt, trainingBlock);
             stmt.executeUpdate();
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
@@ -63,7 +46,6 @@ public class TrainingBlockDAO extends GenericDAO<TrainingBlock> {
                     trainingBlock.setTrainingBlockId(generatedKeys.getInt(1));
                 }
             }
-            
         }
     }
 
@@ -74,29 +56,31 @@ public class TrainingBlockDAO extends GenericDAO<TrainingBlock> {
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            if (trainingBlock.hasName()) {
-                stmt.setString(1, trainingBlock.getName());
-            } else {
-                stmt.setNull(1, Types.VARCHAR);
-            }
-
-            if (trainingBlock.hasDescription()) {
-                stmt.setString(2, trainingBlock.getDescription());
-            } else {
-                stmt.setNull(2, Types.VARCHAR);
-            }
-
-            if (trainingBlock.hasDuration()) {
-                stmt.setInt(3, trainingBlock.getDuration());
-            } else {
-                stmt.setNull(3, Types.INTEGER);
-            }
-
-            stmt.setInt(4, trainingBlock.getUserId());
+            fillStatement(stmt, trainingBlock);
             stmt.setInt(5, trainingBlock.getTrainingBlockId());
             stmt.executeUpdate();
         }
     }
 
+    private void fillStatement(PreparedStatement stmt, TrainingBlock trainingBlock) throws SQLException {
+        if (trainingBlock.hasName()) {
+            stmt.setString(1, trainingBlock.getName());
+        } else {
+            stmt.setNull(1, Types.VARCHAR);
+        }
+
+        if (trainingBlock.hasDescription()) {
+            stmt.setString(2, trainingBlock.getDescription());
+        } else {
+            stmt.setNull(2, Types.VARCHAR);
+        }
+
+        if (trainingBlock.hasDuration()) {
+            stmt.setInt(3, trainingBlock.getDuration());
+        } else {
+            stmt.setNull(3, Types.INTEGER);
+        }
+
+        stmt.setInt(4, trainingBlock.getUserId());
+    }
 }

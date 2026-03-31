@@ -45,6 +45,10 @@ public class Session {
         this.userId = userId;
     }
 
+    public boolean hasDescription() {
+        return this.description != null;
+    }
+
     @Override
     public String toString() {
         return "Session{id=" + sessionId + ", name='" + name + "', description='" + description + "', userId=" + userId

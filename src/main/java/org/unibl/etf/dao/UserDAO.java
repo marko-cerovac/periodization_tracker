@@ -41,31 +41,7 @@ class UserDAO extends GenericDAO<User> {
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-
-            stmt.setString(1, user.getUsername());
-
-            if (user.hasAge()) {
-                stmt.setInt(2, user.getAge());
-            } else {
-                stmt.setNull(2, Types.INTEGER);
-            }
-            if (user.hasGender()) {
-                stmt.setString(3, user.getGender().toString());
-            } else {
-                stmt.setNull(3, Types.INTEGER);
-            }
-
-            if (user.hasWeight()) {
-                stmt.setDouble(4, user.getWeight());
-            } else {
-                stmt.setNull(4, Types.DOUBLE);
-            }
-
-            if (user.hasHeight()) {
-                stmt.setDouble(5, user.getHeight());
-            } else {
-                stmt.setNull(5, Types.DOUBLE);
-            }
+            fillStatement(stmt, user);
             stmt.executeUpdate();
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
@@ -84,31 +60,36 @@ class UserDAO extends GenericDAO<User> {
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setString(1, user.getUsername());
-
-            if (user.getAge() != null) {
-                stmt.setInt(2, user.getAge());
-            } else {
-                stmt.setNull(2, Types.INTEGER);
-            }
-            if (user.getGender() != null) {
-                stmt.setString(3, user.getGender().toString());
-            } else {
-                stmt.setNull(4, Types.VARCHAR);
-            }
-            if (user.getWeight() != null) {
-                stmt.setDouble(4, user.getWeight());
-            } else {
-                stmt.setNull(4, Types.DOUBLE);
-            }
-            if (user.getHeight() != null) {
-                stmt.setDouble(5, user.getHeight());
-            } else {
-                stmt.setNull(5, Types.DOUBLE);
-            }
+            fillStatement(stmt, user);
             stmt.setInt(6, user.getUserId());
             stmt.executeUpdate();
+        }
+    }
+
+    private void fillStatement(PreparedStatement stmt, User user) throws SQLException {
+        stmt.setString(1, user.getUsername());
+
+        if (user.hasAge()) {
+            stmt.setInt(2, user.getAge());
+        } else {
+            stmt.setNull(2, Types.INTEGER);
+        }
+        if (user.hasGender()) {
+            stmt.setString(3, user.getGender().toString());
+        } else {
+            stmt.setNull(3, Types.VARCHAR);
+        }
+
+        if (user.hasWeight()) {
+            stmt.setDouble(4, user.getWeight());
+        } else {
+            stmt.setNull(4, Types.DOUBLE);
+        }
+
+        if (user.hasHeight()) {
+            stmt.setDouble(5, user.getHeight());
+        } else {
+            stmt.setNull(5, Types.DOUBLE);
         }
     }
 }

@@ -9,11 +9,12 @@ import org.unibl.etf.model.PPAspect;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class ExerciseDAO extends GenericDAO<Exercise> {
-    private static TargetDAO targetDAO;
-    private static ExerciseTypeDAO exerciseTypeDAO;
-    private static PPAspectDAO ppAspectDAO;
+    private static TargetDAO targetDAO = new TargetDAO();
+    private static ExerciseTypeDAO exerciseTypeDAO = new ExerciseTypeDAO();
+    private static PPAspectDAO ppAspectDAO = new PPAspectDAO();
 
     @Override
     public String getTableName() {
@@ -40,13 +41,8 @@ public class ExerciseDAO extends GenericDAO<Exercise> {
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, exercise.getName());
-            if (exercise.hasDescription()) {
-                stmt.setString(2, exercise.getDescription());
-            } else {
-                stmt.setNull(2, Types.VARCHAR);
-            }
-            stmt.setInt(3, exercise.getExerciseTypeId());
+
+            fillStatement(stmt, exercise);
             stmt.executeUpdate();
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
@@ -65,14 +61,7 @@ public class ExerciseDAO extends GenericDAO<Exercise> {
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, exercise.getName());
-
-            if (exercise.hasDescription()) {
-                stmt.setString(2, exercise.getDescription());
-            } else {
-                stmt.setNull(2, Types.VARCHAR);
-            }
-            stmt.setInt(3, exercise.getExerciseTypeId());
+            fillStatement(stmt, exercise);
             stmt.setInt(4, exercise.getExerciseId());
             stmt.executeUpdate();
         }
@@ -116,5 +105,19 @@ public class ExerciseDAO extends GenericDAO<Exercise> {
             }
         }
         return ppAspects;
+    }
+
+    public Optional<ExerciseType> getExerciseType(Exercise exercise) throws SQLException {
+        return exerciseTypeDAO.findById(exercise.getExerciseTypeId());
+    }
+
+    private void fillStatement(PreparedStatement stmt, Exercise exercise) throws SQLException {
+            stmt.setString(1, exercise.getName());
+            if (exercise.hasDescription()) {
+                stmt.setString(2, exercise.getDescription());
+            } else {
+                stmt.setNull(2, Types.VARCHAR);
+            }
+            stmt.setInt(3, exercise.getExerciseTypeId());
     }
 }
