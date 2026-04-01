@@ -3,10 +3,15 @@ package org.unibl.etf.dao;
 import org.unibl.etf.util.DatabaseConnection;
 import org.unibl.etf.model.Gender;
 import org.unibl.etf.model.User;
+import org.unibl.etf.model.TrainingPlan;
 
 import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
 
 class UserDAO extends GenericDAO<User> {
+    private static TrainingPlanDAO trainingPlanDAO = new TrainingPlanDAO();
+
     @Override
     public String getTableName() {
         return "users";
@@ -64,6 +69,22 @@ class UserDAO extends GenericDAO<User> {
             stmt.setInt(6, user.getUserId());
             stmt.executeUpdate();
         }
+    }
+
+    public List<TrainingPlan> getTrainingPlans(User user) throws SQLException {
+        String query = "SELECT * FROM training_plans WHERE user_id = ?";
+        List<TrainingPlan> trainingPlans = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, user.getUserId());
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                trainingPlans.add(trainingPlanDAO.mapRow(rs));
+            }
+        }
+        return trainingPlans;
     }
 
     private void fillStatement(PreparedStatement stmt, User user) throws SQLException {

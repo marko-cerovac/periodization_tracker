@@ -6,6 +6,8 @@ import org.unibl.etf.util.DatabaseConnection;
 
 import java.sql.*;
 import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SetDAO extends GenericDAO<Set> {
     private static ExerciseDAO exerciseDAO = new ExerciseDAO();
@@ -68,6 +70,22 @@ public class SetDAO extends GenericDAO<Set> {
 
     public Optional<Exercise> getExercise(Set set) throws SQLException {
         return exerciseDAO.findById(set.getExerciseId());
+    }
+
+    public List<Set> findBySessionId(int sessionId) throws SQLException {
+        String query = "SELECT * FROM sets WHERE session_id = ?";
+        List<Set> sets = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, sessionId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                sets.add(mapRow(rs));
+            }
+        }
+        return sets;
     }
 
     private void fillStatement(PreparedStatement stmt, Set set) throws SQLException {

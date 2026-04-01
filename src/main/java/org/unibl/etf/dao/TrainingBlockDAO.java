@@ -4,8 +4,8 @@ import org.unibl.etf.model.TrainingBlock;
 import org.unibl.etf.util.DatabaseConnection;
 
 import java.sql.*;
-// import java.util.List;
-// import java.util.ArrayList;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * TrainingBlockDAO
@@ -60,6 +60,22 @@ public class TrainingBlockDAO extends GenericDAO<TrainingBlock> {
             stmt.setInt(5, trainingBlock.getTrainingBlockId());
             stmt.executeUpdate();
         }
+    }
+
+    public List<TrainingBlock> findByUserId(int userId) throws SQLException {
+        String query = "SELECT * FROM training_blocks WHERE user_id = ?";
+        List<TrainingBlock> trainingBlocks = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                trainingBlocks.add(mapRow(rs));
+            }
+        }
+        return trainingBlocks;
     }
 
     private void fillStatement(PreparedStatement stmt, TrainingBlock trainingBlock) throws SQLException {
