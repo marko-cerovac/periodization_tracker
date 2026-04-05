@@ -154,6 +154,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `periodization_tracker`.`users` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   `age` INT UNSIGNED NULL,
   `gender` ENUM('Male', 'Female', 'AlphabetPerson') NULL,
   `weight` DOUBLE NULL,
@@ -169,7 +170,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sessions` (
   `session_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `description` MEDIUMTEXT NOT NULL,
+  `description` MEDIUMTEXT,
   `user_id` INT NOT NULL,
   PRIMARY KEY (`session_id`),
   UNIQUE INDEX `session_id_UNIQUE` (`session_id` ASC) VISIBLE,
@@ -195,6 +196,7 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sets` (
   `exercise_id` INT NOT NULL,
   `repetition_type_id` INT NOT NULL,
   `session_id` INT NOT NULL,
+  `is_done` BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (`set_id`),
   INDEX `fk_sets_repetition_types1_idx` (`repetition_type_id` ASC) VISIBLE,
   INDEX `fk_sets_sessions1_idx` (`session_id` ASC) VISIBLE,
