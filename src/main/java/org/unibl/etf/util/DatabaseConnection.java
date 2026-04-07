@@ -22,7 +22,7 @@ public final class DatabaseConnection {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("MariaDB driver not found", e);
         }
-        
+
         Properties properties = new Properties();
 
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("db.properties")) {
@@ -53,5 +53,4 @@ public final class DatabaseConnection {
 
         return instance;
     }
-    
 }

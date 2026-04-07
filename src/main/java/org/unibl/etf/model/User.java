@@ -1,20 +1,18 @@
 package org.unibl.etf.model;
 
+import org.unibl.etf.util.PasswordHasher;
+
 public class User {
     private int userId;
     private String username;
-    private Integer age;
+    private String password;
     private Gender gender;
-    private Double weight;
-    private Double height;
 
-    public User(int userId, String username, int age, Gender gender, Double weight, Double height) {
+    public User(int userId, String username, String password, Gender gender) {
         this.userId = userId;
         this.username = username;
-        this.age = age;
+        this.password = password != null ? PasswordHasher.hashPassword(password) : null;
         this.gender = gender;
-        this.weight = weight;
-        this.height = height;
     }
 
     public int getUserId() {
@@ -25,20 +23,12 @@ public class User {
         return username;
     }
 
-    public Integer getAge() {
-        return age;
+    public String getPassword() {
+        return password;
     }
 
     public Gender getGender() {
         return gender;
-    }
-
-    public Double getWeight() {
-        return weight;
-    }
-
-    public Double getHeight() {
-        return height;
     }
 
     public void setUserId(int userId) {
@@ -49,41 +39,34 @@ public class User {
         this.username = username;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setPassword(String password) {
+        this.password = PasswordHasher.hashPassword(password);
+    }
+
+    /**
+     * Stores an already-hashed password directly, without hashing again.
+     * Use this when reconstructing a User from a database row.
+     *
+     * @param hash the pre-computed password hash
+     */
+    public void setPasswordHash(String hash) {
+        this.password = hash;
     }
 
     public void setGender(Gender gender) {
         this.gender = gender;
     }
 
-    public void setWeight(Double weight) {
-        this.weight = weight;
-    }
-
-    public void setHeight(Double height) {
-        this.height = height;
-    }
-
-    public boolean hasAge() {
-        return age != null;
-    }
-
     public boolean hasGender() {
         return gender != null;
     }
 
-    public boolean hasWeight() {
-        return weight != null;
-    }
-
-    public boolean hasHeight() {
-        return height != null;
-    }
-
     @Override
     public String toString() {
-        return "User{id=" + userId + ", username='" + username + "', age=" + age + ", gender='" + gender
-                + "', weight=" + weight + ", height=" + height + "}";
+        return "User{id=" + userId +
+                ", username='" + username +
+                "', password='" + password +
+                "', gender = '" + gender +
+                "'}";
     }
 }

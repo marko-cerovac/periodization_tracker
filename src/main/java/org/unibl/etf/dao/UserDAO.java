@@ -7,9 +7,10 @@ import org.unibl.etf.model.TrainingPlan;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 
-class UserDAO extends GenericDAO<User> {
+public class UserDAO extends GenericDAO<User> {
     private static TrainingPlanDAO trainingPlanDAO = new TrainingPlanDAO();
 
     @Override
@@ -30,19 +31,19 @@ class UserDAO extends GenericDAO<User> {
             gender = Gender.valueOf(genderStr);
         }
 
-        return new User(
+        User user = new User(
                 rs.getInt(getPrimaryKeyColumn()),
                 rs.getString("username"),
-                rs.getObject("age", Integer.class),
-                gender,
-                rs.getObject("weight", Double.class),
-                rs.getObject("height", Double.class));
+                null,
+                gender);
+        user.setPasswordHash(rs.getString("password"));
+        return user;
     }
 
     @Override
     public void create(User user) throws SQLException {
-        String query = "INSERT INTO " + getTableName()
-                + " (username, age, gender, weight, height) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO users " +
+                "(username, password, gender) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -59,15 +60,32 @@ class UserDAO extends GenericDAO<User> {
 
     @Override
     public void update(User user) throws SQLException {
-        String query = "UPDATE " + getTableName()
-                + " SET username = ?, age = ?, gender = ?, weight = ?, height = ? WHERE " + getPrimaryKeyColumn()
-                + " = ?";
+        String query = "UPDATE users " +
+                "SET username = ?, password = ?, gender = ? " +
+                "WHERE user_id = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
             fillStatement(stmt, user);
-            stmt.setInt(6, user.getUserId());
+            stmt.setInt(4, user.getUserId());
             stmt.executeUpdate();
+        }
+    }
+
+    public Optional<User> findByUsername(String username) throws SQLException {
+        String query = "SELECT * FROM users WHERE username = ?";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(mapRow(rs));
+
+            } else {
+                return Optional.empty();
+            }
         }
     }
 
@@ -89,28 +107,12 @@ class UserDAO extends GenericDAO<User> {
 
     private void fillStatement(PreparedStatement stmt, User user) throws SQLException {
         stmt.setString(1, user.getUsername());
+        stmt.setString(2, user.getPassword());
 
-        if (user.hasAge()) {
-            stmt.setInt(2, user.getAge());
-        } else {
-            stmt.setNull(2, Types.INTEGER);
-        }
         if (user.hasGender()) {
             stmt.setString(3, user.getGender().toString());
         } else {
             stmt.setNull(3, Types.VARCHAR);
-        }
-
-        if (user.hasWeight()) {
-            stmt.setDouble(4, user.getWeight());
-        } else {
-            stmt.setNull(4, Types.DOUBLE);
-        }
-
-        if (user.hasHeight()) {
-            stmt.setDouble(5, user.getHeight());
-        } else {
-            stmt.setNull(5, Types.DOUBLE);
         }
     }
 }

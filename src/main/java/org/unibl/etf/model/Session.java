@@ -4,13 +4,11 @@ public class Session {
     private int sessionId;
     private String name;
     private String description;
-    private int userId;
 
-    public Session(int sessionId, String name, String description, int userId) {
+    public Session(int sessionId, String name, String description) {
         this.sessionId = sessionId;
         this.name = name;
         this.description = description;
-        this.userId = userId;
     }
 
     public int getSessionId() {
@@ -25,10 +23,6 @@ public class Session {
         return description;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
     public void setSessionId(int sessionId) {
         this.sessionId = sessionId;
     }
@@ -41,17 +35,12 @@ public class Session {
         this.description = description;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public boolean hasDescription() {
         return this.description != null;
     }
 
     @Override
     public String toString() {
-        return "Session{id=" + sessionId + ", name='" + name + "', description='" + description + "', userId=" + userId
-                + "}";
+        return "Session{id=" + sessionId + ", name='" + name + "', description='" + description + "'}";
     }
 }

@@ -31,6 +31,7 @@ public class SetDAO extends GenericDAO<Set> {
                 rs.getDouble("weight"),
                 rs.getInt("rpe"),
                 rs.getShort("block"),
+                rs.getBoolean("is_done"),
                 rs.getInt("exercise_id"),
                 rs.getInt("repetition_type_id"),
                 rs.getInt("session_id"));
@@ -39,9 +40,9 @@ public class SetDAO extends GenericDAO<Set> {
     @Override
     public void create(Set set) throws SQLException {
         String query = "INSERT INTO sets " +
-                "(number_of_repetitions, rest_duration, weight, rpe, block, exercise_id, repetition_type_id, session_id) "
+                "(number_of_repetitions, rest_duration, weight, rpe, block, is_done, exercise_id, repetition_type_id, session_id) "
                 +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -60,11 +61,13 @@ public class SetDAO extends GenericDAO<Set> {
     public void update(Set set) throws SQLException {
         String query = "UPDATE sets SET " +
                 "number_of_repetitions = ?, rest_duration = ?, weight = ?, rpe = ?, " +
-                "block = ?, exercise_id = ? repetition_type_id = ?, session_id = ?";
+                "block = ?, is_done = ?, exercise_id = ? repetition_type_id = ?, session_id = ?" +
+                " WHERE set_id = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
             fillStatement(stmt, set);
+            stmt.setInt(10, set.getSetId());
         }
     }
 
@@ -119,9 +122,10 @@ public class SetDAO extends GenericDAO<Set> {
             stmt.setNull(5, Types.TINYINT);
         }
 
-        stmt.setInt(6, set.getExerciseId());
-        stmt.setInt(7, set.getRepetitionTypeId());
-        stmt.setInt(8, set.getSessionId());
+        stmt.setBoolean(6, set.getIsDone());
+        stmt.setInt(7, set.getExerciseId());
+        stmt.setInt(8, set.getRepetitionTypeId());
+        stmt.setInt(9, set.getSessionId());
         stmt.executeUpdate();
     }
 }

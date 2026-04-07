@@ -149,37 +149,14 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `periodization_tracker`.`users`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `periodization_tracker`.`users` (
-  `user_id` INT NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `age` INT UNSIGNED NULL,
-  `gender` ENUM('Male', 'Female', 'AlphabetPerson') NULL,
-  `weight` DOUBLE NULL,
-  `height` DOUBLE NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `periodization_tracker`.`sessions`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sessions` (
   `session_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `description` MEDIUMTEXT,
-  `user_id` INT NOT NULL,
+  `description` MEDIUMTEXT NULL,
   PRIMARY KEY (`session_id`),
-  UNIQUE INDEX `session_id_UNIQUE` (`session_id` ASC) VISIBLE,
-  INDEX `fk_sessions_users1_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `fk_sessions_users1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `periodization_tracker`.`users` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  UNIQUE INDEX `session_id_UNIQUE` (`session_id` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -193,10 +170,10 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sets` (
   `weight` DOUBLE NULL,
   `rpe` INT UNSIGNED NULL,
   `block` TINYINT NULL,
+  `is_done` TINYINT NOT NULL,
   `exercise_id` INT NOT NULL,
   `repetition_type_id` INT NOT NULL,
   `session_id` INT NOT NULL,
-  `is_done` BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (`set_id`),
   INDEX `fk_sets_repetition_types1_idx` (`repetition_type_id` ASC) VISIBLE,
   INDEX `fk_sets_sessions1_idx` (`session_id` ASC) VISIBLE,
@@ -243,6 +220,19 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `periodization_tracker`.`users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `periodization_tracker`.`users` (
+  `user_id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `gender` ENUM('Male', 'Female', 'AlphabetPerson') NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `periodization_tracker`.`training_blocks`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `periodization_tracker`.`training_blocks` (
@@ -259,28 +249,6 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`training_blocks` (
     REFERENCES `periodization_tracker`.`users` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `periodization_tracker`.`training_block_has_sessions`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `periodization_tracker`.`training_block_has_sessions` (
-  `training_block_id` INT NOT NULL,
-  `session_id` INT NOT NULL,
-  PRIMARY KEY (`training_block_id`, `session_id`),
-  INDEX `fk_training_blocks_has_sessions_sessions1_idx` (`session_id` ASC) VISIBLE,
-  INDEX `fk_training_blocks_has_sessions_training_blocks1_idx` (`training_block_id` ASC) VISIBLE,
-  CONSTRAINT `fk_training_blocks_has_sessions_training_blocks1`
-    FOREIGN KEY (`training_block_id`)
-    REFERENCES `periodization_tracker`.`training_blocks` (`training_block_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_training_blocks_has_sessions_sessions1`
-    FOREIGN KEY (`session_id`)
-    REFERENCES `periodization_tracker`.`sessions` (`session_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -324,52 +292,76 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`training_plan_has_training_b
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-USE `periodization_tracker` ;
 
 -- -----------------------------------------------------
--- Placeholder table for view `periodization_tracker`.`muscles`
+-- Table `periodization_tracker`.`user_logs`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `periodization_tracker`.`muscles` (`id` INT);
+CREATE TABLE IF NOT EXISTS `periodization_tracker`.`user_logs` (
+  `user_log_id` INT NOT NULL AUTO_INCREMENT,
+  `date` DATETIME NOT NULL,
+  `age` INT NULL,
+  `weight` DOUBLE NULL,
+  `height` DOUBLE NULL,
+  `bodyfat_percentage` DOUBLE NULL,
+  `satisfaction` TINYINT(8) NULL,
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`user_log_id`),
+  INDEX `fk_user_logs_users1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_logs_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `periodization_tracker`.`users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
--- Placeholder table for view `periodization_tracker`.`tendons`
+-- Table `periodization_tracker`.`session_logs`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `periodization_tracker`.`tendons` (`target_id` INT, `name` INT, `latin_name` INT, `description` INT, `type` INT);
+CREATE TABLE IF NOT EXISTS `periodization_tracker`.`session_logs` (
+  `session_log_id` INT NOT NULL AUTO_INCREMENT,
+  `date` DATETIME NOT NULL,
+  `difficulty` TINYINT(8) UNSIGNED NULL,
+  `session_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`session_log_id`),
+  UNIQUE INDEX `session_log_id_UNIQUE` (`session_log_id` ASC) VISIBLE,
+  INDEX `fk_session_logs_sessions1_idx` (`session_id` ASC) VISIBLE,
+  INDEX `fk_session_logs_users1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_session_logs_sessions1`
+    FOREIGN KEY (`session_id`)
+    REFERENCES `periodization_tracker`.`sessions` (`session_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_session_logs_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `periodization_tracker`.`users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
--- View `periodization_tracker`.`muscles`
+-- Table `periodization_tracker`.`training_block_has_sessions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `periodization_tracker`.`muscles`;
-USE `periodization_tracker`;
-CREATE  OR REPLACE VIEW `muscles` AS
-SELECT
-	targets.target_id,
-    targets.name,
-    targets.latin_name,
-    targets.description,
-    target_types.name as type
-FROM targets
-JOIN target_types ON targets.target_id = target_types.target_type_id
-WHERE target_types.name = 'muscle';
+CREATE TABLE IF NOT EXISTS `periodization_tracker`.`training_block_has_sessions` (
+  `training_block_id` INT NOT NULL,
+  `session_id` INT NOT NULL,
+  PRIMARY KEY (`training_block_id`, `session_id`),
+  INDEX `fk_training_blocks_has_sessions_sessions1_idx` (`session_id` ASC) VISIBLE,
+  INDEX `fk_training_blocks_has_sessions_training_blocks1_idx` (`training_block_id` ASC) VISIBLE,
+  CONSTRAINT `fk_training_blocks_has_sessions_training_blocks1`
+    FOREIGN KEY (`training_block_id`)
+    REFERENCES `periodization_tracker`.`training_blocks` (`training_block_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_training_blocks_has_sessions_sessions1`
+    FOREIGN KEY (`session_id`)
+    REFERENCES `periodization_tracker`.`sessions` (`session_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- View `periodization_tracker`.`tendons`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `periodization_tracker`.`tendons`;
-USE `periodization_tracker`;
-CREATE  OR REPLACE VIEW `tendons` AS
-    SELECT 
-        targets.target_id,
-        targets.name,
-        targets.latin_name,
-        targets.description,
-        target_types.name AS type
-    FROM
-        targets
-            JOIN
-        target_types ON targets.target_type_id = target_types.target_type_id
-    WHERE
-        target_types.name = 'tendon';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

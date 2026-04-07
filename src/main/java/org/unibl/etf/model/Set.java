@@ -7,24 +7,26 @@ public class Set {
     private Double weight;
     private Integer rpe;
     private Short block;
+    private boolean isDone;
     private int exerciseId;
     private int repetitionTypeId;
     private int sessionId;
 
     public Set(int setId, Integer numberOfRepetitions, Integer restDuration, Double weight,
-            Integer rpe, Short block, int exerciseId, int repetitionTypeId, int sessionId) {
+            Integer rpe, Short block, boolean isDone, int exerciseId, int repetitionTypeId, int sessionId) {
         this.setId = setId;
         this.numberOfRepetitions = numberOfRepetitions;
         this.restDuration = restDuration;
         this.weight = weight;
         this.rpe = rpe;
         this.block = block;
+        this.isDone = isDone;
         this.exerciseId = exerciseId;
         this.repetitionTypeId = repetitionTypeId;
         this.sessionId = sessionId;
     }
 
-    public int getSetId() {
+	public int getSetId() {
         return setId;
     }
 
@@ -47,6 +49,10 @@ public class Set {
     public Short getBlock() {
         return block;
     }
+
+    public boolean getIsDone() {
+		return isDone;
+	}
 
     public int getExerciseId() {
         return exerciseId;
@@ -83,6 +89,10 @@ public class Set {
     public void setBlock(Short block) {
         this.block = block;
     }
+
+	public void setIsDone(boolean isDone) {
+		this.isDone = isDone;
+	}
 
     public void setExerciseId(int exerciseId) {
         this.exerciseId = exerciseId;

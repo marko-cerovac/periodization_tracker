@@ -26,14 +26,13 @@ public class SessionDAO extends GenericDAO<Session> {
         return new Session(
                 rs.getInt("session_id"),
                 rs.getString("name"),
-                rs.getString("description"),
-                rs.getInt("user_id"));
+                rs.getString("description"));
     }
 
     @Override
     public void create(Session session) throws SQLException {
         String query = "INSERT INTO sessions " +
-                "(name, description, user_id) VALUES (?, ?, ?)";
+                "(name, description) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -51,13 +50,13 @@ public class SessionDAO extends GenericDAO<Session> {
     @Override
     public void update(Session session) throws SQLException {
         String query = "UPDATE session " +
-                "SET name = ?, description = ?, user_id = ? "
+                "SET name = ?, description = ? "
                 + "WHERE session_id = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
             fillStatement(stmt, session);
-            stmt.setInt(4, session.getSessionId());
+            stmt.setInt(3, session.getSessionId());
             stmt.executeUpdate();
         }
     }
@@ -88,6 +87,5 @@ public class SessionDAO extends GenericDAO<Session> {
         } else {
             stmt.setNull(2, Types.VARCHAR);
         }
-        stmt.setInt(3, session.getUserId());
     }
 }
