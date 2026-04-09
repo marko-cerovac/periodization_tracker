@@ -4,7 +4,17 @@ This board tracks various TODOs of this project.
 
 ## 1. Backlog
 
-- [ ] finish the _LoginController_ class
+- [ ] add a _main view_
+- [ ] add a _profile view_
+- [ ] add _training plans view_
+- [ ] add _log session view_
+- [ ] add _exercise atlas view_
+
+- [ ] implement a _MainController_
+- [ ] implement a _ProfileController_
+- [ ] implement a _TrainingPlansController_
+- [ ] implement a _LogSessionController_
+- [ ] implement a _ExerciseAtlasController_
 
 ## 2. Implementing
 
@@ -23,3 +33,4 @@ This board tracks various TODOs of this project.
 - [x] add _is_done_ to Set
 - [x] implement the _UserLogDAO_ class
 - [x] delete the _muscles_ and _tendons_ views
+- [x] finish the _LoginController_ class

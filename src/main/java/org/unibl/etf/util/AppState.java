@@ -1,35 +1,32 @@
 package org.unibl.etf.util;
 
+import org.unibl.etf.model.User;
+
 /**
  * AppState
  */
 public final class AppState {
     private static volatile AppState instance;
-    private int userId;
-    private String username;
+    private User currentUser;
 
-    private AppState(int userId) {
-        this.userId = userId;
-    }
-
-    public static void init(int userId) {
-        instance = new AppState(userId);
-    }
-
-    public static void clear() {
-        instance.userId = 0;
-        instance.username = null;
-    }
+    private AppState() {}
 
     public static synchronized AppState getInstance() {
+        if (instance == null) {
+            instance = new AppState();
+        }
         return instance;
     }
 
-    public int getLoggedInUserId() {
-        return userId;
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
     }
 
-    public String getLoggedInUserName() {
-        return username;
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void logout() {
+        currentUser = null;
     }
 }

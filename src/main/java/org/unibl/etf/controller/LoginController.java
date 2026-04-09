@@ -1,5 +1,7 @@
 package org.unibl.etf.controller;
 
+import org.unibl.etf.App;
+import org.unibl.etf.util.AppState;
 import org.unibl.etf.util.PasswordHasher;
 import org.unibl.etf.model.User;
 import org.unibl.etf.util.InvalidCredentialsException;
@@ -11,9 +13,14 @@ import java.util.Optional;
 import org.unibl.etf.dao.UserDAO;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class LoginController {
 
@@ -51,8 +58,9 @@ public class LoginController {
                 errorLabel.setText("");
                 usernameField.clear();
                 passwordField.clear();
-                // TODO: Navigate to main application window
-                System.exit(0);
+
+                AppState.getInstance().setCurrentUser(user);
+                loadMainView();
 
             } else {
                 // System.out.println("The hash should be: " + user.getPassword()); // DEBUG
@@ -71,6 +79,19 @@ public class LoginController {
     @FXML
     private void handleQuitting() {
         System.exit(0);
+    }
+
+    private void loadMainView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("main_view.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            errorLabel.setText("Error loading main view: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }
