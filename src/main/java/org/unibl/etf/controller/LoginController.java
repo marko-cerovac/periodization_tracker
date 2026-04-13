@@ -63,8 +63,6 @@ public class LoginController {
                 loadMainView();
 
             } else {
-                // System.out.println("The hash should be: " + user.getPassword()); // DEBUG
-                // System.out.println("The hash is currently: " + PasswordHasher.hashPassword(password)); // DEBUG
                 throw new InvalidCredentialsException("Wrong credentials: incorrect password for username " + username);
             }
         } catch (NoSuchElementException e) {

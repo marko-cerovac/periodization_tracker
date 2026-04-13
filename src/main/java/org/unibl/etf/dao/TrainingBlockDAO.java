@@ -1,5 +1,6 @@
 package org.unibl.etf.dao;
 
+import org.unibl.etf.model.Session;
 import org.unibl.etf.model.TrainingBlock;
 import org.unibl.etf.util.DatabaseConnection;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
  * TrainingBlockDAO
  */
 public class TrainingBlockDAO extends GenericDAO<TrainingBlock> {
+    private SessionDAO sessionDAO = new SessionDAO();
 
     @Override
     public String getTableName() {
@@ -60,6 +62,26 @@ public class TrainingBlockDAO extends GenericDAO<TrainingBlock> {
             stmt.setInt(5, trainingBlock.getTrainingBlockId());
             stmt.executeUpdate();
         }
+    }
+
+    public List<Session> getSessions(TrainingBlock trainingBlock) throws SQLException {
+        String query = "SELECT s.session_id, s.name, s.description " +
+                "FROM training_block_has_sessions ths " +
+                "JOIN sessions s ON ths.session_id = s.session_id " +
+                "WHERE ths.training_block_id = ?";
+
+        List<Session> sessions = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, trainingBlock.getTrainingBlockId());
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                sessions.add(sessionDAO.mapRow(rs));
+            }
+        }
+        return sessions;
     }
 
     public List<TrainingBlock> findByUserId(int userId) throws SQLException {

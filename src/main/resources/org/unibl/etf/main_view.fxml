@@ -50,7 +50,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.controller.MainViewController">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.controller.MainViewController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -99,7 +99,7 @@
                      <children>
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showTrainingPlansView" text="Training plans" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showLogSessionsView" text="Log session" />
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showProgressView" text="Progress" />
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showProgressView" text="Log progress" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showExerciseAtlasView" text="Exercise atlas" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showProfileView" text="Profile" />
                      </children>

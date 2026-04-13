@@ -97,7 +97,6 @@ abstract class GenericDAO<T> {
                 results.add(mapRow(rs));
             }
         }
-
         return results;
     }
 

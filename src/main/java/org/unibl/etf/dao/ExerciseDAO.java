@@ -68,8 +68,16 @@ public class ExerciseDAO extends GenericDAO<Exercise> {
 
     }
 
+
+    // To improve the speed of targets fetching:
+    // SELECT e.name, e.exercise_id, t.target_id, t.name AS target_name
+    // FROM exercises e
+    // LEFT JOIN exercise_hits_targets eht ON e.exercise_id = eht.exercise_id
+    // LEFT JOIN targets t ON eht.target_id = t.target_id
+    // WHERE e.exercise_id = 1
+    // LIMIT 20;
     public List<Target> getTargets(Exercise exercise) throws SQLException {
-        String query = "SELECT t.target_id, t.name, t.lain_name, t.description, t.target_type_id " +
+        String query = "SELECT t.target_id, t.name, t.latin_name, t.description, t.target_type_id " +
             "FROM exercise_hits_targets eht " +
             "JOIN targets t ON eht.target_id = t.target_id " +
             "WHERE eht.exercise_id = ?";

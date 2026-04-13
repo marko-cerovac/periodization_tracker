@@ -85,7 +85,7 @@ public class ProfileController {
 
     private void returnToLoginScreen() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/unibl/etf/login.fxml"));
             Parent loginRoot = loader.load();
 
             Stage stage = (Stage) usernameLabel.getScene().getWindow();

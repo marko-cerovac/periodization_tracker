@@ -77,10 +77,8 @@ public class TargetDAO extends GenericDAO<Target> {
                 if (rs.next()) {
                     return Optional.of(targetTypeDAO.mapRow(rs));
                 }
-
             }
         }
-
         return Optional.empty();
     }
 

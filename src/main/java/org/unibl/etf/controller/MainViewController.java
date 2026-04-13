@@ -27,22 +27,82 @@ public class MainViewController {
 
     @FXML
     private void showTrainingPlansView() {
-        loadView("training_plans.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/unibl/etf/training_plans.fxml"));
+            Parent view = loader.load();
+
+            if (defaultMainView == null) {
+                defaultMainView = centerPane.getContent();
+            }
+
+            TrainingPlansController plansCtrl = loader.getController();
+
+            plansCtrl.setMainController(this);
+            plansCtrl.loadTrainingPlans();
+
+            centerPane.setContent(view);
+        } catch (IOException e) {
+            System.err.println("Error loading training plans view: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void showLogSessionsView() {
-        loadView("log_sessions.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/unibl/etf/log_sessions.fxml"));
+            Parent view = loader.load();
+
+            if (defaultMainView == null) {
+                defaultMainView = centerPane.getContent();
+            }
+
+            centerPane.setContent(view);
+        } catch (IOException e) {
+            System.err.println("Error loading log sessions view: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void showProgressView() {
-        loadView("progress.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/unibl/etf/log_progress.fxml"));
+            Parent view = loader.load();
+
+            if (defaultMainView == null) {
+                defaultMainView = centerPane.getContent();
+            }
+
+            LogProgressController logCtrl = loader.getController();
+            logCtrl.setMainController(this);
+
+            centerPane.setContent(view);
+        } catch (IOException e) {
+            System.err.println("Error loading progress log view: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void showExerciseAtlasView() {
-        loadView("exercise_atlas.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/unibl/etf/exercise_atlas.fxml"));
+            Parent view = loader.load();
+
+            if (defaultMainView == null) {
+                defaultMainView = centerPane.getContent();
+            }
+
+            ExerciseAtlasController atlasCtrl = loader.getController();
+
+            atlasCtrl.loadExercises();
+
+            centerPane.setContent(view);
+        } catch (IOException e) {
+            System.err.println("Error loading exercise atlas view: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -67,32 +127,14 @@ public class MainViewController {
         }
     }
 
+    public ScrollPane getCenterPane() {
+        return centerPane;
+    }
+
     public void showDefaultView() {
         // Restore the main view content
         if (defaultMainView != null) {
             centerPane.setContent(defaultMainView);
-        }
-    }
-
-    private void loadView(String fxmlPath) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent newView = loader.load();
-
-            ScrollPane scrollWrapper = new ScrollPane();
-            scrollWrapper.setContent(newView);
-            scrollWrapper.setFitToWidth(true);
-
-            // replace the center pane, or create a new one
-            // if it doesn't exist for some reason
-            if (mainSplitPane.getItems().size() > 1) {
-                mainSplitPane.getItems().set(1, scrollWrapper);
-            } else {
-                mainSplitPane.getItems().add(scrollWrapper);
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading view: " + fxmlPath);
-            e.printStackTrace();
         }
     }
 }

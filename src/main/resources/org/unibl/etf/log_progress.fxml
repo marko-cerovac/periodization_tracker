@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.controller.LogProgressController">
+   <children>
+      <VBox alignment="TOP_CENTER" prefHeight="201.0" prefWidth="599.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <children>
+            <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
+               <children>
+                  <Label text="Log progress">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#handleSubmit" text="Submit" />
+                  <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" textFill="#af3b3b" />
+               </children>
+            </HBox>
+            <TextField fx:id="ageField" promptText="age" />
+            <TextField fx:id="weightField" promptText="weight" />
+            <TextField fx:id="heightField" promptText="height" />
+            <TextField fx:id="bodyfatField" promptText="bodyfat percentage" />
+            <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="100.0" spacing="20.0">
+               <children>
+                  <Label text="satisfaction:" />
+                  <Slider fx:id="satisfactionSlider" majorTickUnit="1.0" max="10.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="successMessageLabel" textFill="#3aba4d" />
+                        <Label fx:id="errorMessageLabel" textFill="#bf2e2e" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="100.0" />
+                     </HBox.margin>
+                  </StackPane>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
