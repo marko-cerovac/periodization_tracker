@@ -52,7 +52,7 @@ public class TrainingPlanCardController {
             Parent view = loader.load();
 
             TrainingBlocksController blocksCtrl = loader.getController();
-            blocksCtrl.initialize(this.trainingPlan);
+            blocksCtrl.loadTrainingBlocks(this.trainingPlan);
 
             mainController.getCenterPane().setContent(view);
         } catch (IOException e) {
