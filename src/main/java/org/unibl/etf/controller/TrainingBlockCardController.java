@@ -57,7 +57,10 @@ public class TrainingBlockCardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/unibl/etf/sessions.fxml"));
             Parent view = loader.load();
         
-            // TODO: finish the sessions view and set it here
+            SessionsController sessionsCtrl = loader.getController();
+            sessionsCtrl.loadSessions(this.trainingBlock);
+
+            mainController.getCenterPane().setContent(view);
         } catch (IOException e) {
             System.err.println("Error loading sessions view: " + e.getMessage());
         }

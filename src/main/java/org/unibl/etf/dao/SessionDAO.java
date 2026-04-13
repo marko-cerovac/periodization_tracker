@@ -62,9 +62,9 @@ public class SessionDAO extends GenericDAO<Session> {
     }
 
     public List<PPAspect> getPPAspects(Session session) throws SQLException {
-        String query = "SELECT ppa.pp_aspect_id, ppa.name" +
-                "FROM session_targets_pp_aspects stppa" +
-                "JOIN pp_aspects ppa on stppa.pp_aspect_id = ppa.pp_aspect_id" +
+        String query = "SELECT ppa.pp_aspect_id, ppa.name " +
+                "FROM session_targets_pp_aspects stppa " +
+                "JOIN pp_aspects ppa on stppa.pp_aspect_id = ppa.pp_aspect_id " +
                 "WHERE stppa.session_id = ?";
         List<PPAspect> ppAspects = new ArrayList<>();
 
