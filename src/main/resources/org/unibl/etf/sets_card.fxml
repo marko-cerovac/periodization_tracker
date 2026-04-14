@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox fx:id="exerciseCard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="329.0" prefWidth="808.0" spacing="20.0" style="-fx-border-color: #000000; -fx-border-width: 2px;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.controller.SetsCardController">
    <children>
       <Label fx:id="exerciseNameLabel" text="Exercise name">
