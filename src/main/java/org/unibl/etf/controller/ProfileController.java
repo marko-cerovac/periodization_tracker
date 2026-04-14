@@ -19,7 +19,6 @@ import javafx.scene.control.Button;
  * ProfileController
  */
 public class ProfileController {
-    private MainViewController mainController;
 
     @FXML
     private Label usernameLabel;
@@ -73,13 +72,9 @@ public class ProfileController {
         returnToLoginScreen();
     }
 
-    public void setMainController(MainViewController controller) {
-        this.mainController = controller;
-    }
-
     @FXML
     private void handleBack() {
-        mainController.showDefaultView();
+        AppState.getInstance().getMainController().showDefaultView();
     }
     
 

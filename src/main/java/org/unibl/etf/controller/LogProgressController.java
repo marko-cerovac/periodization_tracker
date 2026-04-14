@@ -16,7 +16,6 @@ import java.sql.*;
  * LogProgressController
  */
 public class LogProgressController {
-    private MainViewController mainController;
 
     @FXML
     private TextField ageField;
@@ -82,14 +81,10 @@ public class LogProgressController {
         }
     }
 
-    public void setMainController(MainViewController controller) {
-        this.mainController = controller;
-    }
-
     @FXML
     private void handleCancel() {
         successMessageLabel.setText("");
         errorMessageLabel.setText("");
-        mainController.showDefaultView();
+        AppState.getInstance().getMainController().showDefaultView();
     }
 }

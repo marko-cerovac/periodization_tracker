@@ -7,7 +7,9 @@ import org.unibl.etf.util.DatabaseConnection;
 import java.sql.*;
 import java.util.Optional;
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class SetDAO extends GenericDAO<Set> {
     private static ExerciseDAO exerciseDAO = new ExerciseDAO();
@@ -73,6 +75,47 @@ public class SetDAO extends GenericDAO<Set> {
 
     public Optional<Exercise> getExercise(Set set) throws SQLException {
         return exerciseDAO.findById(set.getExerciseId());
+    }
+
+    public Map<Exercise, List<Set>> getSetsAndExercisesPerSession(int session_id) throws SQLException {
+        String query = "SELECT e.name, e.description, " +
+                "e.exercise_type_id, s.repetition_type_id, s.session_id, " +
+                "s.number_of_repetitions, s.rest_duration, s.weight, " +
+                "s.set_id, s.rpe, s.block, e.exercise_id " +
+                "FROM exercises e " +
+                "LEFT JOIN sets s ON e.exercise_id = s.exercise_id " +
+                "WHERE s.session_id = ?";
+
+        Map<Exercise, List<Set>> sets = new LinkedHashMap<>();
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, session_id);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Exercise exercise = new Exercise(
+                        rs.getInt("exercise_id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("exercise_type_id"));
+
+                Set set = new Set(
+                        rs.getInt("set_id"),
+                        rs.getObject("number_of_repetitions", Integer.class),
+                        rs.getObject("rest_duration", Integer.class),
+                        rs.getObject("weight", Double.class),
+                        rs.getObject("rpe", Integer.class),
+                        rs.getObject("block", Short.class),
+                        false,
+                        rs.getInt("exercise_id"),
+                        rs.getInt("repetition_type_id"),
+                        rs.getInt("session_id"));
+
+                sets.computeIfAbsent(exercise, k -> new ArrayList<>()).add(set);
+            }
+        }
+        return sets;
     }
 
     public List<Set> findBySessionId(int sessionId) throws SQLException {

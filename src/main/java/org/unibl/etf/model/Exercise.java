@@ -50,6 +50,22 @@ public class Exercise {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Exercise exercise = (Exercise) obj;
+        return exerciseId == exercise.exerciseId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(exerciseId);
+    }
+
+    @Override
     public String toString() {
         return "Exercise{id=" + exerciseId + ", name='" + name + "', description='" + description + "', exerciseTypeId="
                 + exerciseTypeId + "}";

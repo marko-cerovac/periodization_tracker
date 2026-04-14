@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox fx:id="exerciseCard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="329.0" prefWidth="808.0" spacing="20.0" style="-fx-border-color: #000000; -fx-border-width: 2px;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.unibl.etf.controller.SetsCardController">
+   <children>
+      <Label fx:id="exerciseNameLabel" text="Exercise name">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="exerciseDescriptionLabel" text="Exercise description">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="exerciseTypeLabel" text="Exercise type" />
+      <AnchorPane style="-fx-border-color: #000000; -fx-border-width: 1px;">
+         <children>
+            <ScrollPane layoutX="177.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <content>
+                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="167.0" prefWidth="772.0">
+                     <children>
+                        <GridPane fx:id="setGrid" alignment="CENTER" gridLinesVisible="true" prefHeight="167.49971047093845" prefWidth="772.4986647092535" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columnConstraints>
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="400.49936963212474" minWidth="10.0" prefWidth="374.6660566438435" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="417.49972398112544" minWidth="10.0" prefWidth="372.49935827777597" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="417.49972398112544" minWidth="10.0" prefWidth="372.49935827777597" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="417.49972398112544" minWidth="10.0" prefWidth="372.49935827777597" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="417.49972398112544" minWidth="10.0" prefWidth="372.49935827777597" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</VBox>

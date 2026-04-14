@@ -6,8 +6,11 @@ import org.unibl.etf.dao.SessionDAO;
 import org.unibl.etf.util.AppState;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,7 +19,6 @@ import java.util.List;
  */
 public class SessionCardController {
     private Session session;
-    private MainViewController mainController;
 
     @FXML
     private Label sessionNameLabel;
@@ -26,10 +28,6 @@ public class SessionCardController {
 
     @FXML
     private Label sessionPPAspectsLabel;
-
-    public void setMainController(MainViewController mainController) {
-        this.mainController = mainController;
-    }
 
     public void setSession(Session session) {
         if (session == null) {
@@ -59,11 +57,34 @@ public class SessionCardController {
     private void handleOpening() {
         AppState.getInstance().setCurrentSession(this.session);
 
-        // TODO
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/unibl/etf/sets_view.fxml"));
+            Parent view = loader.load();
+
+            SetsController setsCtrl = loader.getController();
+            setsCtrl.loadExercises();
+
+            AppState.getInstance().getMainController().getCenterPane().setContent(view);
+        } catch (IOException e) {
+            System.err.println("Error loading exercises and sets view: " + e.getMessage());
+            // e.printStackTrace();
+        }
     }
 
     @FXML
     private void handleLogging() {
-        // TODO
+        AppState.getInstance().setCurrentSession(this.session);
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/unibl/etf/log_session.fxml"));
+            Parent view = loader.load();
+
+            AppState.getInstance()
+                    .getMainController()
+                    .getCenterPane()
+                    .setContent(view);
+        } catch (IOException e) {
+            System.err.println("Error loading session logging view: " + e);
+        }
     }
 }

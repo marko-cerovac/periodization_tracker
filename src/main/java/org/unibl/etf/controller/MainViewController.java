@@ -26,6 +26,11 @@ public class MainViewController {
     private Node defaultMainView;
 
     @FXML
+    private void initialize() {
+        AppState.getInstance().setMainController(this);
+    }
+
+    @FXML
     private void showTrainingPlansView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/unibl/etf/training_plans.fxml"));
@@ -37,7 +42,6 @@ public class MainViewController {
 
             TrainingPlansController plansCtrl = loader.getController();
 
-            plansCtrl.setMainController(this);
             plansCtrl.loadTrainingPlans();
 
             centerPane.setContent(view);
@@ -75,7 +79,6 @@ public class MainViewController {
             }
 
             LogProgressController logCtrl = loader.getController();
-            logCtrl.setMainController(this);
 
             centerPane.setContent(view);
         } catch (IOException e) {
@@ -118,7 +121,6 @@ public class MainViewController {
             ProfileController profileCtrl = loader.getController();
 
             profileCtrl.setUsernameLabel(AppState.getInstance().getCurrentUser().getUsername());
-            profileCtrl.setMainController(this);
 
             centerPane.setContent(view);
         } catch (IOException e) {

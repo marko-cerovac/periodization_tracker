@@ -54,9 +54,9 @@ public final class AppState {
         this.currentSession = session;
     }
 
-    public Session getSession() {
-        return this.currentSession;
-    }
+	public Session getCurrentSession() {
+		return currentSession;
+	}
 
     public void clearPlan() {
         this.currentPlan = null;
@@ -84,9 +84,5 @@ public final class AppState {
 
 	public static void setInstance(AppState instance) {
 		AppState.instance = instance;
-	}
-
-	public Session getCurrentSession() {
-		return currentSession;
 	}
 }

@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
  */
 public class TrainingBlockCardController {
     private TrainingBlock trainingBlock;
-    private MainViewController mainController;
 
     @FXML
     private VBox trainingBlockCard;
@@ -29,10 +28,6 @@ public class TrainingBlockCardController {
 
     @FXML
     private Label blockDurationLabel;
-
-    public void setMainController(MainViewController mainController) {
-        this.mainController = mainController;
-    }
 
     public void setTrainingBlock(TrainingBlock trainingBlock) {
         if (trainingBlock == null) {
@@ -60,11 +55,10 @@ public class TrainingBlockCardController {
             SessionsController sessionsCtrl = loader.getController();
             sessionsCtrl.loadSessions(this.trainingBlock);
 
-            mainController.getCenterPane().setContent(view);
+            AppState.getInstance().getMainController().getCenterPane().setContent(view);
         } catch (IOException e) {
             System.err.println("Error loading sessions view: " + e.getMessage());
         }
-
     }
 
     public VBox getCardView() {

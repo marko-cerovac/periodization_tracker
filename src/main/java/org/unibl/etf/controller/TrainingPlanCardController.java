@@ -17,7 +17,6 @@ import javafx.scene.control.Label;
  */
 public class TrainingPlanCardController {
     private TrainingPlan trainingPlan;
-    private MainViewController mainController;
 
     @FXML
     private VBox trainingPlanCard;
@@ -27,11 +26,6 @@ public class TrainingPlanCardController {
 
     @FXML
     private Label planDescriptionLabel;
-
-    public void setMainController(MainViewController controller) {
-
-        this.mainController = controller;
-    }
 
     public void setTrainingPlan(TrainingPlan trainingPlan) {
         if (trainingPlan == null) {
@@ -54,7 +48,7 @@ public class TrainingPlanCardController {
             TrainingBlocksController blocksCtrl = loader.getController();
             blocksCtrl.loadTrainingBlocks(this.trainingPlan);
 
-            mainController.getCenterPane().setContent(view);
+            AppState.getInstance().getMainController().getCenterPane().setContent(view);
         } catch (IOException e) {
             System.err.println("Error loading training blocks view: " + e.getMessage());
             // e.printStackTrace();

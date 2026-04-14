@@ -98,7 +98,6 @@
                   <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="547.0" prefWidth="222.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showTrainingPlansView" text="Training plans" />
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showLogSessionsView" text="Log session" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showProgressView" text="Log progress" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showExerciseAtlasView" text="Exercise atlas" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showProfileView" text="Profile" />

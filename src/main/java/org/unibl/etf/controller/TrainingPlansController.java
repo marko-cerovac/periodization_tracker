@@ -22,12 +22,6 @@ public class TrainingPlansController {
     @FXML
     private FlowPane trainingPlansGrid;
 
-    private MainViewController mainController;
-
-    public void setMainController(MainViewController controller) {
-        this.mainController = controller;
-    }
-
     public void loadTrainingPlans() {
         try {
             List<TrainingPlan> trainingPlans = new TrainingPlanDAO().findByUserId(AppState.getInstance().getCurrentUser().getUserId());
@@ -38,8 +32,6 @@ public class TrainingPlansController {
 
                 TrainingPlanCardController cardCtrl = loader.getController();
                 cardCtrl.setTrainingPlan(trainingPlan);
-
-                cardCtrl.setMainController(mainController);
 
                 trainingPlansGrid.getChildren().add(card);
             }
