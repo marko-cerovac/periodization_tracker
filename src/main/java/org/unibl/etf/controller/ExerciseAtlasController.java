@@ -9,7 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -23,15 +25,16 @@ public class ExerciseAtlasController {
 
     public void loadExercises() {
         try {
-            List<Exercise> exercises = new ExerciseDAO().findAll();
+            Map<Exercise, ArrayList<Target>> exercisesWithTargets = new ExerciseDAO().getExercisesWithTargets();
 
-            for (var exercise : exercises) {
+            for (var entry : exercisesWithTargets.entrySet()) {
+                Exercise exercise = entry.getKey();
+                ArrayList<Target> targets = entry.getValue();
+                
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/unibl/etf/exercise_card.fxml"));
                 Node card = loader.load();
                 ExerciseCardController cardController = loader.getController();
 
-                // get targets for this exercise
-                List<Target> targets = new ExerciseDAO().getTargets(exercise);
                 cardController.setExercise(exercise, targets);
 
                 exerciseGrid.getChildren().add(card);
