@@ -1,0 +1,2 @@
+- [ ] finish the trigger
+- [ ] create a procedure

@@ -5,12 +5,12 @@ USE periodization_tracker;
 -- users
 -- -----------------------------------------------------
 INSERT INTO `users` (`username`, `password`, `gender`) VALUES
-  ('anatoly_pisarenko', '4eNmC2SXiAO41mwwH0xAEFmDnQCphGzPR5WP+WLtTkw=', 'Male'),
-  ('vasily_alexeev',    'PHq+Du3qTe/lsxmv/Jpila2U362tUZh2pMPsrDARAvg=', 'Female'),
-  ('asen_zlatev',       '$2a$10$abcdefghijklmnopqrstuv', 'Male'),
-  ('naim_suleymanoglu', '$2a$10$zyxwvutsrqponmlkjihgf', 'Female'),
-  ('piros_dimas',       '$2a$10$abcdefghijklmnopqrstuv', 'AlphabetPerson'),
-  ('valerios_leonidis', '$2a$10$zyxwvutsrqponmlkjihgf', 'Male');
+  ('anatoly_pisarenko', 'tbTQN4dMYwusxsZhf7wQtTz8yNQEglsqd3GL4jiDjMw=', 'Male'),
+  ('vasily_alexeev', 'eqVhZsXXjV8FNWa0EOUe0jTbY/xvIUYLvpwfjlPaMGo=', 'Female'),
+  ('asen_zlatev', 'myiSkRfdHjuCr/5IWg2xAnwwMsZ57ASZAFG+8J9WYQ4=', 'Male'),
+  ('naim_suleymanoglu', 'xzMpBCbk/4KNB+em8e/Kqk/ANXhuJUZJ8GxsZpYfp80=', 'Female'),
+  ('piros_dimas', '7xREO4WZFDr/w6lgrCD+igxT55zorUtNvBpJmkO8TZE=', 'AlphabetPerson'),
+  ('valerios_leonidis', 'xA3/i8ohICQCwFBUkOFkGD233YKk5kIyxxYT6X2U078=', 'Male');
 
 -- -----------------------------------------------------
 -- target_types

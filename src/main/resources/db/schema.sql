@@ -362,7 +362,91 @@ CREATE TABLE IF NOT EXISTS `periodization_tracker`.`training_block_has_sessions`
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+USE `periodization_tracker`;
+
+-- -----------------------------------------------------
+-- Placeholder table for view `periodization_tracker`.`exercises_with_targets`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `periodization_tracker`.`exercises_with_targets` (`exercise_id` INT, `name` INT, `description` INT, `exercise_type_id` INT, `target_id` INT, `target_name` INT, `target_latin_name` INT, `target_description` INT, `target_type_id` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `periodization_tracker`.`sets_and_exercises_per_session`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `periodization_tracker`.`sets_and_exercises_per_session` (`name` INT, `description` INT, `exercise_type_id` INT, `repetition_type_id` INT, `session_id` INT, `number_of_repetitions` INT, `rest_duration` INT, `weight` INT, `set_id` INT, `rpe` INT, `block` INT, `exercise_id` INT);
+
+-- -----------------------------------------------------
+-- procedure add_user_log
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `periodization_tracker`$$
+CREATE PROCEDURE add_user_log(
+    IN p_date DATETIME,
+    IN p_age INT,
+    IN p_weight DOUBLE,
+    IN p_height DOUBLE,
+    IN p_bodyfat_percentage DOUBLE,
+    IN p_satisfaction TINYINT,
+    IN p_user_id INT
+)
+BEGIN
+    DECLARE last_age INT;
+
+    IF p_age IS NULL THEN
+        SELECT age INTO last_age
+        FROM user_logs
+        WHERE user_id = p_user_id
+        ORDER BY `date` DESC
+        LIMIT 1;
+        
+        -- if the age is still null, just set it to 18
+        IF last_age IS NULL THEN SET last_age = 18; END IF;
+    ELSE
+        SET last_age = p_age;
+    END IF;
+
+    INSERT INTO user_logs (`date`, age, weight, height, bodyfat_percentage, satisfaction, user_id)
+    VALUES (p_date, last_age, p_weight, p_height, p_bodyfat_percentage, p_satisfaction, p_user_id);
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- View `periodization_tracker`.`exercises_with_targets`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `periodization_tracker`.`exercises_with_targets`;
+USE `periodization_tracker`;
+CREATE  OR REPLACE VIEW `exercises_with_targets` AS
+SELECT e.*, t.target_id, t.name AS target_name,
+t.latin_name AS target_latin_name, t.description AS target_description, t.target_type_id
+FROM exercises e
+LEFT JOIN exercise_hits_targets eht ON e.exercise_id = eht.exercise_id
+LEFT JOIN targets t ON eht.target_id = t.target_id;
+
+-- -----------------------------------------------------
+-- View `periodization_tracker`.`sets_and_exercises_per_session`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `periodization_tracker`.`sets_and_exercises_per_session`;
+USE `periodization_tracker`;
+CREATE  OR REPLACE VIEW `sets_and_exercises_per_session` AS
+SELECT e.name, e.description, 
+e.exercise_type_id, s.repetition_type_id, s.session_id, 
+s.number_of_repetitions, s.rest_duration, s.weight, 
+s.set_id, s.rpe, s.block, e.exercise_id 
+FROM exercises e 
+LEFT JOIN sets s ON e.exercise_id = s.exercise_id;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+USE `periodization_tracker`;
+
+DELIMITER $$
+USE `periodization_tracker`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `periodization_tracker`.`users_AFTER_INSERT` AFTER INSERT ON `users` FOR EACH ROW
+BEGIN
+    INSERT INTO user_logs ( `date`, `age`, `weight`, `height`, `bodyfat_percentage`, `satisfaction`, `user_id`)
+    VALUES (NOW(), 18, 80.0, 175.0, 15.0, 5, NEW.user_id);
+END$$
+
+DELIMITER ;
